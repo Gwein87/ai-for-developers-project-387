@@ -1,0 +1,26 @@
+name: vulnerabilities
+
+on:
+  push:
+  schedule:
+    - cron: "23 3 * * 1"
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions: {}
+
+jobs:
+  scan:
+    uses: google/osv-scanner-action/.github/workflows/osv-scanner-reusable.yml@c7c7bcb0773cc4678a674ada03a66cc5c4325476 # v2.6.0
+    with:
+      scan-args: |-
+        --config=./osv-scanner.toml
+        --recursive
+        ./
+      fail-on-vuln: true
+    permissions:
+      actions: read
+      contents: read
+      security-events: write
