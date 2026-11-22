@@ -23,6 +23,9 @@
     "db:test:prepare": "dotnet tool restore && node scripts/prepare-test-database.mjs"
   },
   "overrides": {
+    "@hey-api/json-schema-ref-parser@1.4.4": {
+      "js-yaml": "4.3.2"
+    },
     "@scalar/json-magic@0.13.5": {
       "undici": "7.30.1"
     }
