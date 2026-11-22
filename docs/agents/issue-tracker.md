@@ -25,7 +25,7 @@ gh repo view --json nameWithOwner
 ```
 
 Создавай задачи только в репозитории пользователя. Для этого проекта ожидаемая
-цель — `Gwein87/ai-for-developers-project-386`.
+цель — [Gwein87/ai-for-developers-project-387](https://github.com/Gwein87/ai-for-developers-project-387/issues).
 
 ## Pull request как источник запросов
 
