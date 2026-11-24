@@ -1,0 +1,61 @@
+name: OpenCode
+
+on:
+  issue_comment:
+    types: [created]
+
+permissions:
+  contents: read
+
+jobs:
+  opencode:
+    if: >-
+      !github.event.issue.pull_request &&
+      github.event.comment.user.type == 'User' &&
+      !github.event.comment.performed_via_github_app &&
+      contains(fromJSON('["OWNER","MEMBER","COLLABORATOR"]'), github.event.comment.author_association) &&
+      (github.event.comment.body == '/oc' || startsWith(github.event.comment.body, '/oc ') ||
+       github.event.comment.body == '/opencode' || startsWith(github.event.comment.body, '/opencode '))
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    concurrency:
+      group: opencode-issue-${{ github.event.issue.number }}
+      cancel-in-progress: false
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          persist-credentials: false
+
+      - name: Check out project skills
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          repository: mattpocock/skills
+          ref: d65391149dbb5fe76478e76fa8d5122b2aa5a70e
+          path: .runner-skills
+          sparse-checkout: |
+            skills/engineering
+            skills/productivity
+          persist-credentials: false
+
+      - name: Install project skills
+        shell: bash
+        run: |
+          mv .runner-skills "$RUNNER_TEMP/project-skills"
+          mkdir -p "$HOME/.agents/skills"
+          for manifest in "$RUNNER_TEMP"/project-skills/skills/{engineering,productivity}/*/SKILL.md; do
+            cp -R "$(dirname "$manifest")" "$HOME/.agents/skills/"
+          done
+          test -s "$HOME/.agents/skills/ask-matt/SKILL.md"
+
+      - name: Run OpenCode
+        uses: anomalyco/opencode/github@77fc88c8ade8e5a620ebbe1197f3a572d29ae91a
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+        with:
+          model: opencode/deepseek-v4.1-flash
+          mentions: /oc,/opencode
+          share: false
