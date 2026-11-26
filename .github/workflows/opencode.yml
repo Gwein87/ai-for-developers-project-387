@@ -1,6 +1,9 @@
 name: OpenCode
 
 on:
+  # OIDC is required for the app; the job accepts only trusted users' issue commands.
+  # Review on 2027-02-24.
+  # actionlint ignore=dangerous-triggers
   issue_comment:
     types: [created]
 
