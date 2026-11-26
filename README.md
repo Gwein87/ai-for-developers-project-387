@@ -25,6 +25,7 @@ OpenCode отвечает в той же задаче, а при запросе 
 Сейчас это `opencode/deepseek-v4.1-flash`. После смены модели в основной ветке
 следующий вызов использует новое значение. При смене провайдера обновите также
 имя и значение секрета. [Инструкция Hexlet по ключам и моделям](https://help.hexlet.io/ai/opencode).
+Проверенный разбор настройки с успешным [прогоном Actions](https://github.com/Gwein87/ai-for-developers-project-387/actions/runs/45823872047) сохранён в [ответе на задачу](https://github.com/Gwein87/ai-for-developers-project-387/issues/4#issuecomment-7192606490).
 
 ## Сценарий работы
 
